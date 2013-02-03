@@ -1,0 +1,32 @@
+#!/bin/zsh
+# THEA BACKUP SCRIPTS
+# 
+# Restore a file from backup
+
+source /usr/local/share/thea/config
+source /usr/local/share/thea/functions
+
+echof_date=0
+echof_silent=0
+echof_color=1
+
+maybe_disable_color
+
+if [[ "."${1} = "." || "."${2} = "." || ! "${2}" =~ "^[0-9]+$" || ${2} -ge ${RSNAPSHOT_SNAPSHOTS} ]]
+then
+	echof "Required arguments are missing or invalid" "error"
+	echof "Usage: thea-restore <filename> <snapshot number>" "info"
+	echof "Snapshot number must be smaller than ${RSNAPSHOT_SNAPSHOTS}" "info"
+	exit 1
+fi
+
+check_if_mounted
+if [ $? -ne 0 ]
+then
+	echof "Backup volume is not mounted" "error"
+	echof "Always run thea-mount before using the backup recovery commands" "info"
+	exit 1
+fi
+
+do_restore "${1}" ${2}
+exit $?

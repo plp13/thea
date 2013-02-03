@@ -1,0 +1,17 @@
+#!/bin/zsh
+# THEA BACKUP SCRIPTS
+# 
+# Mount the backup volume
+
+source /usr/local/share/thea/config
+source /usr/local/share/thea/functions
+
+echof_date=0
+echof_silent=0
+echof_color=1
+
+maybe_disable_color
+
+do_config
+
+exit $?

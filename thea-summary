@@ -1,0 +1,31 @@
+#!/bin/zsh
+# THEA BACKUP SCRIPTS
+# 
+# Summarize the differences between a file and all its backed up versions
+
+source /usr/local/share/thea/config
+source /usr/local/share/thea/functions
+
+echof_date=0
+echof_silent=0
+echof_color=1
+
+maybe_disable_color
+
+if [ "."${1} = "." ]
+then
+	echof "Required arguments are missing or invalid" "error"
+	echof "Usage: thea-summary <filename>" "info"
+	exit 1
+fi
+
+check_if_mounted
+if [ $? -ne 0 ]
+then
+	echof "Backup volume is not mounted" "error"
+	echof "Always run thea-mount before using the backup recovery commands" "info"
+	exit 1
+fi
+
+do_summary "${1}"
+exit $?

@@ -1,0 +1,39 @@
+#!/bin/zsh
+# THEA BACKUP SCRIPTS
+# 
+# Run thea-backup inside a terminal after waiting for a while - to be launched via a GUI button
+
+source /usr/local/share/thea/config
+source /usr/local/share/thea/functions
+
+check_gui
+
+echof_date=0
+echof_silent=1
+echof_color=1
+
+maybe_disable_color
+
+(
+	declare local ih
+
+	for i in {1..${BACKUP_DELAY}}
+	do
+		let "ih=${i}*100/${BACKUP_DELAY}"
+		echo "${ih}"
+		sleep 1
+	done
+) | yad --progress \
+	--width=480 \
+	--title="Backup is about to start" \
+	--text="Press Cancel to abort" \
+	--percentage=0 \
+	--auto-close \
+	--button="gtk-cancel:1"
+if [ $? -eq 1 ]
+then
+	exit 4
+fi
+
+${TERMINAL_CMD} ${TERMINAL_CMD_ARGS} -e "thea-backup ${@} andpause"
+exit $?

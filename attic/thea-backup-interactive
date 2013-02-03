@@ -1,0 +1,39 @@
+#!/bin/zsh
+# THEA BACKUP SCRIPTS
+# 
+# Make a backup - interactive version with sleep and poweroff facility
+# Note: This script actually runs thea-backup
+
+source /usr/local/share/thea/config
+source /usr/local/share/thea/functions
+
+check_gui
+
+echof_date=0
+echof_silent=0
+
+set_term_title "Backup"
+
+if [ "."${1} = ".andsleep" ]
+then
+	echof "Note: once backup is completed, the computer will be suspended" "info"
+elif [ "."${1} = ".andpoweroff" ]
+then
+	echof "Note: once backup is completed, the computer will be shut down" "info"
+fi
+
+delay_some_time
+
+thea-backup
+
+if [ "."${1} = ".andsleep" ]
+then
+	sudo ${SUSPEND_CMD} ${SUSPEND_CMD_ARGS}
+elif [ "."${1} = ".andpoweroff" ]
+then
+	sudo ${POWEROFF_CMD} ${POWEROFF_CMD_ARGS}
+fi
+
+press_to_exit
+
+exit 0

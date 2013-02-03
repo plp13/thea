@@ -1,0 +1,63 @@
+#!/bin/zsh
+# THEA BACKUP SCRIPTS
+# 
+# Mount the backup volume - to be launched via a GUI button
+# Note: This script actually runs thea-mount
+
+source /usr/local/share/thea/config
+source /usr/local/share/thea/functions
+
+check_gui
+
+echof_date=0
+echof_silent=1
+echof_color=1
+
+maybe_disable_color
+
+(
+	echo "10"
+	echo "# Mounting backup volume"
+
+	do_mount "gksudo"
+	ret=$?
+	if [ ${ret} -eq 0 ]
+	then
+		success=1
+		echo "90"
+		echo "# Backup volume ${BACKUP_VOLUME} is now mounted"
+		sleep ${INFO_DELAY}
+	elif [ ${ret} -eq 2 ]
+	then
+		success=1
+		echo "90"
+		echo "# Backup volume ${BACKUP_VOLUME} is already mounted"
+		sleep ${INFO_DELAY}
+	else
+		success=0
+	fi
+
+	echo "100"
+
+	if [ ${success} -eq 0 ]
+	then
+		yad --error \
+			--title="Error" \
+			--text="Unable to mount backup volume ${BACKUP_VOLUME}"
+	fi
+
+	if [[ "."${1} = ".andopen" && ${success} -eq 1 ]]
+	then
+		xdg-open ${BACKUP_VOLUME}
+	fi
+) |
+yad --progress \
+	--width=480 \
+	--title="Mounting backup volume" \
+	--text="Mounting backup volume ${BACKUP_VOLUME}" \
+	--percentage=0 \
+	--pulsate \
+	--auto-close \
+	--no-buttons
+
+exit 0

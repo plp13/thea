@@ -1,0 +1,62 @@
+#!/bin/zsh
+# THEA BACKUP SCRIPTS
+# 
+# Make a backup
+
+source /usr/local/share/thea/config
+source /usr/local/share/thea/functions
+
+echof_date=0
+echof_silent=0
+echof_color=1
+
+maybe_disable_color
+
+set_term_title "Backup"
+
+if [ "."${1} = ".andsleep" ]
+then
+	echof "Note: once backup is completed, the computer will be suspended" "heading"
+
+elif [ "."${1} = ".andpoweroff" ]
+then
+	echof "Note: once backup is completed, the computer will be shut down" "heading"
+fi
+
+echof_date=1
+
+echof "Starting backup" "info"
+
+do_mount
+if [[ $? -ne 0 && $? -ne 2 ]]
+then
+	exit 1
+fi
+
+do_backup
+if [ $? -ne 0 ]
+then
+	exit 2
+fi
+
+do_umount
+if [ $? -ne 0 ]
+then
+	exit 3 
+fi
+
+if [ ".${1}" = ".andsleep" ]
+then
+	sudo ${SUSPEND_CMD} ${SUSPEND_CMD_ARGS}
+	press_to_exit
+elif [ ".${1}" = ".andpoweroff" ]
+then
+	sudo ${POWEROFF_CMD} ${POWEROFF_CMD_ARGS}
+	press_to_exit
+elif [ ".${1}" = ".andpause" ]
+then
+	press_to_exit
+fi
+
+
+exit 0
