@@ -231,7 +231,7 @@ also run "thea-umount" after you are done with them.
 ### Searching your Backups
 
 To summarize the backup status of a file or directory, use "thea-summary
-\[filename\]":
+<filename>":
 
     % thea-summary README.md
     * File: /home/plp/Documents/Development/Other/Present/Thea/README.md
@@ -257,7 +257,7 @@ To summarize the backup status of a file or directory, use "thea-summary
     14        0 bytes               not in backup
 
 To view the differences between a file and one of its backed up versions, use
-"thea-diff \[filename\] \[snapshot number\]":
+"thea-diff <filename> <snapshot number>":
 
     % thea-diff README.md 0
     * File: /home/plp/Documents/Development/Other/Present/Thea/README.md
@@ -276,8 +276,10 @@ To view the differences between a file and one of its backed up versions, use
     >     \*  Writing configuration to /etc/rsnapshot.conf
     >     \*  Configuration written to /etc/rsnapshot.conf
 
+### Restoring from Backup
+
 To restore a file to one of its backed up versions, use "thea-restore
-\[filename\] \[snapshot number\]":
+<filename> <snapshot number>":
 
     % thea-restore thea-gui-backup-interactive 14
     * File: /home/plp/Documents/Development/Other/Present/Thea/thea-gui-backup-interactive
