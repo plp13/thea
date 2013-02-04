@@ -2,15 +2,34 @@
 # THEA BACKUP SCRIPTS
 # 
 # Make a backup
+# Exit codes:
+# 0	Backup completed successfully
+# 1	Could not mount backup volume
+# 2	Backup command failed
+# 3	Could not unmount backup volume
+# 9	Could not parse arguments
 
 source /usr/local/share/thea/config
 source /usr/local/share/thea/functions
+
+function usage()
+{
+	usage_pre
+	echof "Make a backup" "heading"
+	echof "Usage: thea-backup [options] [postact]" "info"
+	echof "If postact is 'andsleep', the computer will be suspended after backing up" "info"
+	echof "If postact is 'andpoweroff', the computer will be powered off" "info"
+	echof "If postact is 'andpause', the user will be prompted to press ENTER to exit" "info"
+	usage_post
+	exit 9
+}
 
 echof_date=0
 echof_silent=0
 echof_color=1
 
 maybe_disable_color
+parseargs ${0} ${@}
 
 set_term_title "Backup"
 
@@ -45,18 +64,17 @@ then
 	exit 3 
 fi
 
-if [ ".${1}" = ".andsleep" ]
+if [ ".${params[1]}" = ".andsleep" ]
 then
 	sudo ${SUSPEND_CMD} ${SUSPEND_CMD_ARGS}
 	press_to_exit
-elif [ ".${1}" = ".andpoweroff" ]
+elif [ ".${params[1]}" = ".andpoweroff" ]
 then
 	sudo ${POWEROFF_CMD} ${POWEROFF_CMD_ARGS}
 	press_to_exit
-elif [ ".${1}" = ".andpause" ]
+elif [ ".${params[1]}" = ".andpause" ]
 then
 	press_to_exit
 fi
-
 
 exit 0

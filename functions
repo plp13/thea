@@ -3,13 +3,77 @@
 # 
 # Helper functions
 
+# Parse all command line arguments
+# Take appropriate action if arguments include generic options, such as --help or --quiet
+# Then, put the rest of the arguments in $params
+function parseargs() {
+	declare -a local args
+	local i
+
+	args=($(getopt -n "$1" -l "help,color,nocolor,quiet" -- ${@} 2>>/dev/null))
+	if [ $? -ne 0 ]
+	then
+		usage
+	fi
+
+	for i in ${args}
+	do
+		case $i in
+			"--help")
+				usage
+				shift
+				;;
+			"--color")
+				echof_color=1
+				shift
+				;;
+			"--nocolor")
+				echof_color=0
+				shift
+				;;
+			"--quiet")
+				echof_silent=1
+				shift
+				;;
+			"--")
+				shift
+				;;
+			*)
+				params+=("$(echo ${i} | tr -d -t \')")
+		esac
+	done
+
+	export params
+}
+
+# After calling parseopts(), all scripts should use $params in the place of $@
+declare -a params
+
+# Sanitize the environment for printing usage help
+# Should be the first statement of all script-specific usage() functions
+function usage_pre() {
+	echof_date=0
+	echof_silent=0
+	echof_color=1
+}
+
+# Print generic usage options
+# Should be the last statement of all script-specific usage() functions
+function usage_post() {
+	echof "Valid options are:" "info"
+	echof "--help\t\tDisplay this help message" "info"
+	echof "--color\t\tUse color output" "info"
+	echof "--nocolor\t\tDo not use color output" "info"
+	echof "--quiet\t\tBe quiet; do not print anything to standard output" "info"
+}
+
 # Exit script if GUI is not running
 function check_gui() {
 	xset -q >> /dev/null 2>> /dev/null
 	if [ $? -ne 0 ]
 	then
 		echo "This program should only be launched from within the GUI"
-		exit 9
+		exit 8
 	fi
 }
 
@@ -70,9 +134,9 @@ function echof() {
 # Let the user press ENTER to Exit
 function press_to_exit() {
 	echo ""
-	echo -e "$(tput bold)$(tput setaf 3)\c"
+	[ ${echof_color} -eq 1 ] && echo -e "$(tput bold)$(tput setaf 3)\c"
 	echo -e "* \c"
-	echo -e "$(tput sgr0) \c"
+	[ ${echof_color} -eq 1 ] && echo -e "$(tput sgr0) \c"
 	echo -e "Press Enter to exit: \c"
 	read
 }
@@ -556,7 +620,7 @@ function do_diff() {
 				fi
 				echof "Status: different in backup" "heading"
 				echof "Size in backup: ${sizebak} bytes" "info"
-				echof "Differences:\n$(colordiff "${file}" "${filebak}")" "info"
+				echof "Differences:\n${diffs}" "info"
 				return 1
 			fi
 		else
@@ -647,7 +711,7 @@ do_summary() {
 	done
 
 	echof "Status summary:" "heading"
-	echo "${summary}" | column -t -s\| | tr -s "\n"
+	[ ${echof_silent} -ne 1 ] && echo "${summary}" | column -t -s\| | tr -s "\n"
 	return 0
 }
 

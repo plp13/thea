@@ -146,6 +146,21 @@ That's all!
 Usage
 -----
 
+Thea commands are quite simple and easy to understand. If you get lost, you can
+always use "--help". For example:
+
+    % thea-backup --help
+    * Make a backup
+    * Usage: thea-backup [options] [postact]
+    * If postact is 'andsleep', the computer will be suspended after backing up
+    * If postact is 'andpoweroff', the computer will be powered off
+    * If postact is 'andpause', the user will be prompted to press ENTER to exit
+    * Valid options are:
+    * --help		Display this help message
+    * --color		Use color output
+    * --nocolor		Do not use color output
+    * --quiet		Be quiet; do not print anything to standard output
+
 ### Backing Up
 
 To back your system up, use "thea-backup":
@@ -294,16 +309,19 @@ Quick reference:
 Status
 ------
 
-The code is still very young. It works for me, but probably contains tons of
-bugs and should be considered unstable.
+The code is still very young. It works for me, but it probably contains tons of
+bugs, plus I keep changing it all the time. Therefore, it should be considered
+highly unstable.
+
+In other words:
+
+THIS IS ALPHA QUALITY SOFTWARE. DO NOT BLAME ME IF IT DELETES YOUR FILES, WIPES
+YOUR HARD DRIVE, OR KIDNAPS YOUR CHILDREN!
 
 Todo
 ----
 
 * Test and fix bugs
-* Add more options and switches to the commands, perhaps using GNU getopt:
-  * --color and --nocolor, to enable or disable colorized output, respectively
-  * --help, to show a help message
 * Add a new command, "thea-get", that returns information on the backup version
   of a file (filename, size, status, diffs) without extra information or
   colorization; useful for scripting

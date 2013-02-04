@@ -2,10 +2,24 @@
 # THEA BACKUP SCRIPTS
 # 
 # Mount the backup volume - to be launched via a GUI button
-# Note: This script actually runs thea-mount
+# Exit codes:
+# 0	The command was completed
+# 8	Not in GUI
+# 9	Could not parse arguments
 
 source /usr/local/share/thea/config
 source /usr/local/share/thea/functions
+
+function usage()
+{
+	usage_pre
+	echof "Mount the backup volume" "heading"
+	echof "Usage: thea-gui-mount [options] [postact]" "info"
+	echof "This program should only be launched from within the GUI" "info"
+	echof "If postact is 'andopen', the backup volume will be opened after mounting" "info"
+	usage_post
+	exit 9
+}
 
 check_gui
 
@@ -14,6 +28,7 @@ echof_silent=1
 echof_color=1
 
 maybe_disable_color
+parseargs ${0} ${@}
 
 (
 	echo "10"
@@ -46,7 +61,7 @@ maybe_disable_color
 			--text="Unable to mount backup volume ${BACKUP_VOLUME}"
 	fi
 
-	if [[ "."${1} = ".andopen" && ${success} -eq 1 ]]
+	if [[ "."${params[1]} = ".andopen" && ${success} -eq 1 ]]
 	then
 		xdg-open ${BACKUP_VOLUME}
 	fi

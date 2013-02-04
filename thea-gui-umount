@@ -7,6 +7,16 @@
 source /usr/local/share/thea/config
 source /usr/local/share/thea/functions
 
+function usage()
+{
+	usage_pre
+	echof "Unmount the backup volume" "heading"
+	echof "Usage: thea-gui-umount [options]" "info"
+	echof "This program should only be launched from within the GUI" "info"
+	usage_post
+	exit 9
+}
+
 check_gui
 
 echof_date=0
@@ -14,6 +24,7 @@ echof_silent=1
 echof_color=1
 
 maybe_disable_color
+parseargs ${0} ${@}
 
 (
 	echo "10"

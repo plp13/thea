@@ -2,22 +2,34 @@
 # THEA BACKUP SCRIPTS
 # 
 # Search for differences between a file and a backed up version of the same file
+# Exit codes:
+# 0	Differences printed successfully
+# 1	Error occured while printing differences
+# 9	Could not parse arguments
 
 source /usr/local/share/thea/config
 source /usr/local/share/thea/functions
+
+function usage()
+{
+	usage_pre
+	echof "Search for differences between a file and a backed up version of the same file" "heading"
+	echof "Usage: thea-diff [options] <filename> <snapshot number>" "info"
+	echof "Snapshot number must be smaller than ${RSNAPSHOT_SNAPSHOTS}" "info"
+	usage_post
+	exit 9
+}
 
 echof_date=0
 echof_silent=0
 echof_color=1
 
 maybe_disable_color
+parseargs ${0} ${@}
 
-if [[ "."${1} = "." || "."${2} = "." || ! "${2}" =~ "^[0-9]+$" || ${2} -ge ${RSNAPSHOT_SNAPSHOTS} ]]
+if [[ "."${params[1]} = "." || "."${params[2]} = "." || ! "${params[2]}" =~ "^[0-9]+$" || ${params[2]} -ge ${RSNAPSHOT_SNAPSHOTS} ]]
 then
-	echof "Required arguments are missing or invalid" "error"
-	echof "Usage: thea-diff <filename> <snapshot number>" "info"
-	echof "Snapshot number must be smaller than ${RSNAPSHOT_SNAPSHOTS}" "info"
-	exit 1
+	usage
 fi
 
 check_if_mounted
@@ -28,7 +40,7 @@ then
 	exit 1
 fi
 
-do_diff "${1}" ${2}
+do_diff "${params[1]}" ${params[2]}
 if [ $? -eq 5 ]
 then
 	exit 1
