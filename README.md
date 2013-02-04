@@ -304,6 +304,9 @@ Todo
 * Add more options and switches to the commands, perhaps using GNU getopt:
   * --color and --nocolor, to enable or disable colorized output, respectively
   * --help, to show a help message
+* Add a new command, "thea-get", that returns information on the backup version
+  of a file (filename, size, status, diffs) without extra information or
+  colorization; useful for scripting
 * Write a GUI program for restoring files (this will probably need to be done
   using a real language, such as C or Python)
 * Integrate said GUI program with Thunar, Nautilus, etc.
