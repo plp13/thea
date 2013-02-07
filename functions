@@ -55,6 +55,7 @@ function usage_pre() {
 	echof_date=0
 	echof_silent=0
 	echof_color=1
+	maybe_disable_color
 }
 
 # Print generic usage options
