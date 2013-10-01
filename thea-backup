@@ -49,32 +49,23 @@ echof "Starting backup" "info"
 do_mount
 if [[ $? -ne 0 && $? -ne 2 ]]
 then
+	post_backup_action "${params[1]}"
 	exit 1
 fi
 
 do_backup
 if [ $? -ne 0 ]
 then
+	post_backup_action "${params[1]}"
 	exit 2
 fi
 
 do_umount
 if [ $? -ne 0 ]
 then
+	post_backup_action "${params[1]}"
 	exit 3 
 fi
 
-if [ ".${params[1]}" = ".andsleep" ]
-then
-	sudo ${SUSPEND_CMD} ${SUSPEND_CMD_ARGS}
-	press_to_exit
-elif [ ".${params[1]}" = ".andpoweroff" ]
-then
-	sudo ${POWEROFF_CMD} ${POWEROFF_CMD_ARGS}
-	press_to_exit
-elif [ ".${params[1]}" = ".andpause" ]
-then
-	press_to_exit
-fi
-
+post_backup_action "${params[1]}"
 exit 0

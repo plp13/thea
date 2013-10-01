@@ -312,32 +312,20 @@ function do_backup() {
 	fi
 }
 
-# Suspend the computer
-# Return 0 on success
-# $1 designates sudo command to use (ie "sudo" or "gksudo")
-function do_suspend() {
-	sudo_to_use=${1}
-	if [ "."${sudo_to_use} = "." ]
+# Suspend the computer, power off the computer, or wait for key press after a backup
+function post_backup_action() {
+	if [ ".${1}" = ".andsleep" ]
 	then
-		sudo_to_use="sudo"
-	fi
-
-	${sudo_to_use} ${SUSPEND_CMD} ${SUSPEND_CMD_ARGS}
-	return $?
-}
-
-# Shit down the computer
-# Return 0 on success
-# $1 designates sudo command to use (ie "sudo" or "gksudo")
-function do_poweroff() {
-	sudo_to_use=${1}
-	if [ "."${sudo_to_use} = "." ]
+		sudo ${SUSPEND_CMD} ${SUSPEND_CMD_ARGS}
+		press_to_exit
+	elif [ ".${1}" = ".andpoweroff" ]
 	then
-		sudo_to_use="sudo"
+		sudo ${POWEROFF_CMD} ${POWEROFF_CMD_ARGS}
+		press_to_exit
+	elif [ ".${1}" = ".andpause" ]
+	then
+		press_to_exit
 	fi
-
-	${sudo_to_use} ${POWEROFF_CMD} ${POWEROFF_CMD_ARGS}
-	return $?
 }
 
 # Put a type description of file $1 in $ret
