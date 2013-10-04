@@ -324,9 +324,6 @@ Todo
 ----
 
 * Test and fix bugs
-* Add support for running custom commands before and after backing up; useful
-  when running database servers, virtual machines etc. that need their data to
-  be exported to a consistent state before backing up
 * Add a new command, "thea-get", that returns information on the backup version
   of a file (filename, size, status, diffs) without extra information or
   colorization; useful for scripting

@@ -24,6 +24,12 @@ RSNAPSHOT_SNAPSHOTS=15
 # Rsnapshot backup point - usually "localhost/"
 RSNAPSHOT_POINT=("/" "mauretania/")
 
+# Run a command before backing up
+BACKUP_PRE_CMD="zsh -x /usr/local/share/thea/pre.sh"
+
+# Run a command after backing up
+BACKUP_POST_CMD="zsh -x /usr/local/share/thea/post.sh"
+
 # Seconds to delay before starting backup when running in GUI
 BACKUP_DELAY=5
 

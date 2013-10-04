@@ -53,12 +53,16 @@ then
 	exit 1
 fi
 
+do_backup_pre_cmd
+
 do_backup
 if [ $? -ne 0 ]
 then
 	post_backup_action "${params[1]}"
 	exit 2
 fi
+
+do_backup_post_cmd
 
 do_umount
 if [ $? -ne 0 ]

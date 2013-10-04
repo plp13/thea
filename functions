@@ -7,40 +7,32 @@
 # Take appropriate action if arguments include generic options, such as --help or --quiet
 # Then, put the rest of the arguments in $params
 function parseargs() {
-	declare -a local args
+	declare -a local options
 	local i
 
-	args=($(getopt -n "$1" -l "help,color,nocolor,quiet" -- ${@} 2>>/dev/null))
-	if [ $? -ne 0 ]
-	then
-		usage
-	fi
+	shift
+	zparseopts -a options -D -E -help -color -nocolor -quiet
 
-	for i in ${args}
+	for i in ${options}
 	do
-		case $i in
+		case ${i} in
 			"--help")
 				usage
-				shift
 				;;
 			"--color")
 				echof_color=1
-				shift
 				;;
 			"--nocolor")
 				echof_color=0
-				shift
 				;;
 			"--quiet")
 				echof_silent=1
-				shift
-				;;
-			"--")
-				shift
-				;;
-			*)
-				params+=("$(echo ${i} | tr -d -t \')")
 		esac
+	done
+
+	for i in ${*}
+	do
+		params+=("${i}")
 	done
 
 	export params
@@ -280,6 +272,38 @@ function do_umount() {
 	else
 		echof "Backup volume ${BACKUP_VOLUME} is not mounted" "info"
 		return 2
+	fi
+}
+
+# Execute the pre-backup command
+function do_backup_pre_cmd() {
+	sudo_to_use=${1}
+	if [ "."${sudo_to_use} = "." ]
+	then
+		sudo_to_use="sudo"
+	fi
+
+	echof "Executing command(s) before backup" "info"
+
+	if [ ".$BACKUP_PRE_CMD" != "." ]
+	then
+		eval "${sudo_to_use} ${BACKUP_PRE_CMD}"
+	fi
+}
+
+# Execute the post-backup command
+function do_backup_post_cmd() {
+	sudo_to_use=${1}
+	if [ "."${sudo_to_use} = "." ]
+	then
+		sudo_to_use="sudo"
+	fi
+
+	echof "Executing command(s) after backup" "info"
+
+	if [ ".$BACKUP_POST_CMD" != "." ]
+	then
+		eval "${sudo_to_use} ${BACKUP_POST_CMD}"
 	fi
 }
 
