@@ -130,6 +130,15 @@ Configuration
      system's documentation to find out which commands to use to suspend and
      shut down your computer.
 
+   You may also want to set BACKUP\_PRE\_CMD and BACKUP\_POST\_CMD. These
+   specify a command to run before the backup starts and after it's finished,
+   respectively. In many cases, this is necessary for guaranteeing the
+   integrity of backed up data; for instance, running "mysqldump
+   --all-databases > /data.sql" before backing up will save a snapshot of all
+   MySQL databases in /data.sql.
+
+   TIP: If you need to run multiple commands, write a simple script instead.
+
 4. Run "thea-config" as root. This will automatically configure rsnapshot to work with
    Thea:
 
