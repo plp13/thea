@@ -57,5 +57,5 @@ then
 	exit 4
 fi
 
-${TERMINAL_CMD} ${TERMINAL_CMD_ARGS} -e "thea-backup ${params[1]} andpause"
+${TERMINAL_CMD} ${TERMINAL_CMD_ARGS} -e "thea-backup ${params[1]}"
 exit $?
