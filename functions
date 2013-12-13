@@ -326,10 +326,14 @@ function do_backup() {
 
 	echof "Executing backup command (${RSNAPSHOT_CMD})" "info"
 	${sudo_to_use} ${RSNAPSHOT_CMD} ${RSNAPSHOT_CMD_ARGS} ${RSNAPSHOT_INTERVAL}
-	if [ $? -ne 0 ]
+	if [ $? -eq 1 ]
 	then
 		echof "Backup failed" "error"
 		return 1
+	elif [ $? - eq 2 ]
+		echof "Backup command has issued some warnings; you chould investigate" "info"
+		echof "Backup complete" "ok"
+		return 0
 	else
 		echof "Backup complete" "ok"
 		return 0
