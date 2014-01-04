@@ -201,6 +201,22 @@ backup			${RSNAPSHOT_POINT[1]}	${RSNAPSHOT_POINT[2]}"
 	echof "Configuration written to ${RSNAPSHOT_CONFIG}" "ok"
 	return 0
 }
+
+# Execute the pre-mount command
+function do_mount_pre_cmd() {
+	sudo_to_use=${1}
+	if [ "."${sudo_to_use} = "." ]
+	then
+		sudo_to_use="sudo"
+	fi
+
+	if [ ".$MOUNT_PRE_CMD" != "." ]
+	then
+		echof "Executing command(s) before mount" "info"
+		eval "${sudo_to_use} ${MOUNT_PRE_CMD}"
+	fi
+}
+
 # Mount backup volume
 # Return 0 on success, 1 on failure, 2 if already mounted
 # $1 designates sudo command to use (ie "sudo" or "gksudo")
@@ -222,6 +238,7 @@ function do_mount() {
 	if [ $? -ne 0 ]
 	then
 		echof "Backup volume ${BACKUP_VOLUME} is not mounted" "info"
+		do_mount_pre_cmd ${sudo_to_use}
 		echof "Attempting to mount" "info"
 		${sudo_to_use} mount ${BACKUP_VOLUME}
 		if [ $? -ne 0 ]
@@ -235,6 +252,21 @@ function do_mount() {
 	else
 		echof "Backup volume ${BACKUP_VOLUME} is already mounted" "info"
 		return 2
+	fi
+}
+
+# Execute the post-umount command
+function do_umount_post_cmd() {
+	sudo_to_use=${1}
+	if [ "."${sudo_to_use} = "." ]
+	then
+		sudo_to_use="sudo"
+	fi
+
+	if [ ".$UMOUNT_POST_CMD" != "." ]
+	then
+		echof "Executing command(s) after unmount" "info"
+		eval "${sudo_to_use} ${UMOUNT_POST_CMD}"
 	fi
 }
 
@@ -266,6 +298,7 @@ function do_umount() {
 			echof "Unable to unmount backup volume" "error"
 			return 1
 		else
+			do_umount_post_cmd ${sudo_to_use}
 			echof "Backup volume has been unmounted" "ok"
 			return 0
 		fi
@@ -283,10 +316,9 @@ function do_backup_pre_cmd() {
 		sudo_to_use="sudo"
 	fi
 
-	echof "Executing command(s) before backup" "info"
-
 	if [ ".$BACKUP_PRE_CMD" != "." ]
 	then
+		echof "Executing command(s) before backup" "info"
 		eval "${sudo_to_use} ${BACKUP_PRE_CMD}"
 	fi
 }
@@ -299,10 +331,9 @@ function do_backup_post_cmd() {
 		sudo_to_use="sudo"
 	fi
 
-	echof "Executing command(s) after backup" "info"
-
 	if [ ".$BACKUP_POST_CMD" != "." ]
 	then
+		echof "Executing command(s) after backup" "info"
 		eval "${sudo_to_use} ${BACKUP_POST_CMD}"
 	fi
 }
@@ -331,6 +362,7 @@ function do_backup() {
 		echof "Backup failed" "error"
 		return 1
 	elif [ $? - eq 2 ]
+	then
 		echof "Backup command has issued some warnings; you chould investigate" "info"
 		echof "Backup complete" "ok"
 		return 0

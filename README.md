@@ -45,6 +45,7 @@ The result was this very early version of Thea.
 Requirements
 ------------
 
+* rsnapshot (for backing up)
 * zsh (the program is coded in shell language)
 * yad (for displaying GUI dialogs)
 * sudo (for gaining root privileges when needed)
@@ -137,7 +138,13 @@ Configuration
    --all-databases > /data.sql" before backing up will save a snapshot of all
    MySQL databases in /data.sql.
 
-   TIP: If you need to run multiple commands, write a simple script instead.
+   Similarly, variables MOUNT\_PRE\_CMD and UMOUNT\_POST\_CMD let you execute
+   custom commands before mounting and after unomunting the backup volume,
+   respectively. This may be necessary for more complicated setups (i.e. ones
+   that use LVM, Luks, or NFS over VPN).
+
+   TIP: If you need to run multiple commands, put them in a script and have
+   Thea execute it.
 
 4. Run "thea-config" as root. This will automatically configure rsnapshot to work with
    Thea:

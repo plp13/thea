@@ -21,14 +21,20 @@ RSNAPSHOT_INTERVAL="daily"
 # Number of snapshots for the rsnapshot interval - usually 7 or more
 RSNAPSHOT_SNAPSHOTS=15
 
-# Rsnapshot backup point - usually "localhost/"
-RSNAPSHOT_POINT=("/" "mauretania/")
+# Rsnapshot backup point tuple - usually ("/" "localhost/")
+RSNAPSHOT_POINT=("/" "localhost/")
+
+# Run a command before mounting
+MOUNT_PRE_CMD=""
+
+# Run a command after unmounting
+UMOUNT_POST_CMD=""
 
 # Run a command before backing up
-BACKUP_PRE_CMD="zsh -x /usr/local/share/thea/pre.sh"
+BACKUP_PRE_CMD=""
 
 # Run a command after backing up
-BACKUP_POST_CMD="zsh -x /usr/local/share/thea/post.sh"
+BACKUP_POST_CMD=""
 
 # Seconds to delay before starting backup when running in GUI
 BACKUP_DELAY=5
