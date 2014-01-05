@@ -20,7 +20,7 @@ install:
 	install -D -m 755 thea-gui-backup $(PREFIX)/bin/thea-gui-backup
 	install -D -m 755 thea-gui-mount $(PREFIX)/bin/thea-gui-mount
 	install -D -m 755 thea-gui-umount $(PREFIX)/bin/thea-gui-umount
-	echo "* Thea installed"
+	@echo "* Thea installed"
 
 uninstall:
 	rm $(PREFIX)/share/doc/thea/README.md
@@ -38,5 +38,5 @@ uninstall:
 	rm $(PREFIX)/bin/thea-gui-backup
 	rm $(PREFIX)/bin/thea-gui-mount
 	rm $(PREFIX)/bin/thea-gui-umount
-	echo "* Thea uninstalled"
-	echo "* Your config file has been preserved as $(PREFIX)/share/thea/config.bak"
+	@echo "* Thea uninstalled"
+	@echo "* Your config file has been preserved as $(PREFIX)/share/thea/config.bak"
