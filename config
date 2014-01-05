@@ -55,7 +55,7 @@ POWEROFF_CMD="systemctl"
 POWEROFF_CMD_ARGS="poweroff"
 
 # X terminal command - usually "xterm"
-TERMINAL_CMD="xfce4-terminal"
+TERMINAL_CMD="xterm"
 
 # Arguments of X terminal command - usually left blank
-TERMINAL_CMD_ARGS=("--hide-menubar" "--hide-toolbar")
+TERMINAL_CMD_ARGS=""
