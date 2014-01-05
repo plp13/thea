@@ -327,14 +327,10 @@ Quick reference:
 Status
 ------
 
-The code is still very young. It works for me, but it probably contains tons of
-bugs, plus I keep changing it all the time. Therefore, it should be considered
-highly unstable.
-
-In other words:
-
-THIS IS ALPHA QUALITY SOFTWARE. DO NOT BLAME ME IF IT DELETES YOUR FILES, WIPES
-YOUR HARD DRIVE, OR KIDNAPS YOUR CHILDREN!
+I've been using Thea for almost a year now. During this time I've found and
+fixed several bugs, and none of them was threattening to the integrity of my
+data. Though I don't consider the program to be stable, I think it's now mature
+enough to be used by others who want to contribute to its development. 
 
 Todo
 ----
