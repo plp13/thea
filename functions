@@ -361,7 +361,7 @@ function do_backup() {
 	then
 		echof "Backup failed" "error"
 		return 1
-	elif [ $? - eq 2 ]
+	elif [ $? -eq 2 ]
 	then
 		echof "Backup command has issued some warnings; you chould investigate" "info"
 		echof "Backup complete" "ok"
